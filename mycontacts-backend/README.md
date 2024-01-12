@@ -5,5 +5,9 @@ Node js learning project here I am learning how to build rest api
 - express server
 - nodemon
 - dotenv
+- express async handler
+- mongodb
+- mongoose
+- donenv
 
 
