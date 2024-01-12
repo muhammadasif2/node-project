@@ -9,7 +9,7 @@ const  {
 } = require('../controllers/contactController')
 // get list of contacts
 router.route('/').get(getContacts).post(createContact)
-router.route('/:id').get(getContact).put(updateContact).delete(deleteContact)
+router.route('/:id').delete(deleteContact).get(getContact).put(updateContact)
 
 
 module.exports = router
