@@ -17,11 +17,15 @@ import { cilBell, cilEnvelopeOpen, cilList, cilMenu } from '@coreui/icons'
 import { AppBreadcrumb } from './index'
 import { AppHeaderDropdown } from './header/index'
 import { logo } from 'src/assets/brand/logo'
-
+import { useNavigate } from 'react-router-dom'
 const AppHeader = () => {
   const dispatch = useDispatch()
   const sidebarShow = useSelector((state) => state.sidebarShow)
-
+  const navigae = useNavigate()
+  const logoutHandler = () => {
+    localStorage.removeItem('token');
+    navigae('/login')
+  }
   return (
     <CHeader position="sticky" className="mb-4">
       <CContainer fluid>
@@ -54,7 +58,7 @@ const AppHeader = () => {
             </CNavLink>
           </CNavItem>
           <CNavItem>
-            <CNavLink href="#">
+            <CNavLink href="#" onClick={logoutHandler}>
               <CIcon icon={cilList} size="lg" />
             </CNavLink>
           </CNavItem>

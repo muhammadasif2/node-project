@@ -52,15 +52,11 @@ const _nav = [
     to: '/base',
     icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
     items: [
-      {
-        component: CNavItem,
-        name: 'Add Contacts',
-        to: '/base/accordion',
-      },
+     
       {
         component: CNavItem,
         name: 'Contacts',
-        to: '/base/accordion',
+        to: '/base/contacts',
       },
       {
         component: CNavItem,

@@ -1,4 +1,5 @@
 import React from 'react'
+import AuthCheckHOC from 'src/components/Auth/AuthCheckHOC'
 import { AppContent, AppSidebar, AppFooter, AppHeader } from '../components/index'
 
 const DefaultLayout = () => {
@@ -16,4 +17,4 @@ const DefaultLayout = () => {
   )
 }
 
-export default DefaultLayout
+export default AuthCheckHOC(DefaultLayout)

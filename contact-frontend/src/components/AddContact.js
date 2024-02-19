@@ -21,7 +21,6 @@ const AddContact = props => {
      const isupate =  updateContactHanler(values)
      if(isupate)
      {
-      debugger
       form.resetFields()
      }
   }
@@ -37,14 +36,14 @@ const AddContact = props => {
     <>
       <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
         <Form form={form} name="control-hooks" onFinish={onFinish} style={{ maxWidth: 600 }}>
-          <Form.Item name="title" label="Title" rules={[{ required: true }]}>
-            <Input size="small" />
+          <Form.Item name="title" rules={[{ required: true }]}>
+            <Input size="large" placeholder='Enter Title'/>
           </Form.Item>
-          <Form.Item name="email" label="Email" rules={[{ required: true }]}>
-            <Input size="small" />
+          <Form.Item name="email"  rules={[{ required: true }]}>
+            <Input size="large" placeholder='Enter Email'/>
           </Form.Item>
-          <Form.Item name="description" label="Description" rules={[{ required: true }]}>
-            <Input size="small" />
+          <Form.Item name="description"  rules={[{ required: true }]}>
+            <Input size="large" placeholder='Enter Description'/>
           </Form.Item>
           <Form.Item>
             <Space>
@@ -53,9 +52,6 @@ const AddContact = props => {
               </Button>
               <Button htmlType="button" onClick={onReset}>
                 Reset
-              </Button>
-              <Button type="link" htmlType="button" onClick={onFill}>
-                Fill form
               </Button>
             </Space>
           </Form.Item>

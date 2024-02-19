@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import {
+  CAlert,
   CAvatar,
-  CCol,
-  CProgress,
-  CRow,
-  CSpinner,
   CTable,
   CTableBody,
   CTableDataCell,
@@ -18,92 +15,114 @@ import CIcon from '@coreui/icons-react'
 import { cilPeople } from '@coreui/icons'
 import avatar1 from 'src/assets/images/avatars/1.jpg'
 import AddContact from 'src/components/AddContact'
-import { Form } from 'react-router-dom'
-const Accordion = () => {
+import {
+  ContactList,
+  DeleteContact,
+  SaveContact,
+  UpdateContact,
+} from 'src/api/contacts/ContactContainer'
+const Contacts = () => {
   const [contact, setContact] = useState([])
   const [loader, setLoader] = useState(false)
   const [numRows, setNumRows] = useState(3)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [updateRecord, setIsUpdateRecord] = useState(null)
   const [isdelId, setIsdelId] = useState(null)
-  const [onAddContact, setOnAddContact] = useState(null)
+  const [notification, setNotification] = useState({
+    type: '',
+    message: '',
+  })
+
   useEffect(() => {
     contactListHandler()
-  }, [onAddContact]) // Add dependencies as needed
+  }, []) // Add dependencies as needed
+
+  useEffect(() => {
+    if (notification.message) {
+      setTimeout(() => {
+        setNotification({})
+      }, 2000)
+    }
+  }, [notification]) // Add dependencies as needed
+
   const updateHandler = item => {
     if (item) {
       setIsUpdateRecord(item)
     }
     setIsModalOpen(true)
   }
+
   const addContacthandler = () => {
     setIsModalOpen(true)
   }
-  const contactListHandler = () => {
+
+  const contactListHandler = async () => {
     setLoader(true)
-    axios
-      .get('http://localhost:5001/api/contacts')
-      .then(response => {
-        setContact(response.data)
-        console.log('Data received:', response.data)
-        setNumRows(response.data.length)
-        setLoader(false)
-      })
-      .catch(error => {
-        console.error('Axios error:', error)
-      })
+    const response = await ContactList()
+    if (response) {
+      setContact(response)
+      setNumRows(response.length)
+      setLoader(false)
+    }
   }
-  const deleteHandler = id => {
+
+  const deleteHandler = async id => {
     setLoader(true)
     setIsdelId(id)
-    axios
-      .delete(`http://localhost:5001/api/contacts/${id}`)
-      .then(response => {
-        contactListHandler()
+    const response = await DeleteContact(id)
+    if (response.status) { 
+      await contactListHandler()
+      setNotification({
+        ...notification, // Spread the existing properties
+        type:'delete',
+        message: response?.message, // Update the message property
+      })
+      setLoader(false)
+    }
+  }
+
+  const updateContactHanler = async payload => {
+    if (updateRecord) {
+      setLoader(true)
+      const response = await UpdateContact(updateRecord?._id, payload)
+      if (response.status) {
+        await contactListHandler()
+        setNotification({
+          // Spread the existing properties
+          ...notification,
+          message: response?.data?.message, // Update the message property
+        })
+        setIsUpdateRecord(null)
         setLoader(false)
-      })
-      .catch(error => {
-        console.error('Axios error:', error)
-      })
-  }
- 
-  console.log('updateRecord',updateRecord)
-  const updateContactHanler = async(payload) => {
-    
-   if(updateRecord)
-   {
-     setLoader(true)
-    const response = await axios.put(
-      `http://localhost:5001/api/contacts/${updateRecord?._id}`,
-      payload,
-    )
-    if (response) {
-     
-      contactListHandler()
-      setIsUpdateRecord(null)
-      setLoader(false)
-      setIsModalOpen(false)
-      return true
-    } else {
-      setLoader(false)
+        setIsModalOpen(false)
+        return true
+      } else {
+        setLoader(false)
+      }
+    } 
+    else {
+      setLoader(true)
+      const response = await SaveContact(payload)
+      if (response) {
+        await contactListHandler()
+        setLoader(false)
+        setIsModalOpen(false)
+        setNotification({
+          ...notification, // Spread the existing properties
+          message: response?.data?.message, // Update the message property
+        })
+      } else {
+        setLoader(false)
+      }
     }
   }
-  else {
-    setLoader(true)
-    const response = axios.post('http://localhost:5001/api/contacts', payload)
-    if (response) {
-      setOnAddContact(response)
-      setLoader(false)
-      setIsModalOpen(false)
-      
-    } else {
-      setLoader(false)
-    }
-  }
-  }
- 
   return (
     <>
+      {notification?.message && (
+        <CAlert color={`${notification?.type === 'delete' ? 'danger' : 'success'}`}>
+          {notification?.message}
+        </CAlert>
+      )}
       <Button type="primary" className="m-2" onClick={addContacthandler}>
         Add Contact
       </Button>
@@ -114,8 +133,8 @@ const Accordion = () => {
               <CIcon icon={cilPeople} />
             </CTableHeaderCell>
             <CTableHeaderCell>User</CTableHeaderCell>
-            <CTableHeaderCell className="text-center">Country</CTableHeaderCell>
             <CTableHeaderCell className="text-center">Email</CTableHeaderCell>
+            <CTableHeaderCell className="text-center">Description</CTableHeaderCell>
             <CTableHeaderCell>Activity</CTableHeaderCell>
           </CTableRow>
         </CTableHead>
@@ -137,7 +156,11 @@ const Accordion = () => {
                 <CTableDataCell className="text-center">{item.description}</CTableDataCell>
                 <CTableDataCell>
                   <span>
-                    <Button loading={loader && isdelId ===item._id} className="btn btn-danger" onClick={() => deleteHandler(item._id)}>
+                    <Button
+                      loading={loader && isdelId === item._id}
+                      className="btn btn-danger"
+                      onClick={() => deleteHandler(item._id)}
+                    >
                       Delete
                     </Button>
                   </span>{' '}
@@ -153,7 +176,12 @@ const Accordion = () => {
             ))
           ) : loader ? (
             <CTableDataCell className="text-center" colSpan={5}>
-             <CSpinner variant="grow" />
+              <Skeleton
+                avatar
+                paragraph={{
+                  rows: numRows,
+                }}
+              />
             </CTableDataCell>
           ) : (
             !loader &&
@@ -176,4 +204,4 @@ const Accordion = () => {
   )
 }
 
-export default Accordion
+export default Contacts
