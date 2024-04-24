@@ -8,6 +8,7 @@ const userSchema = new Schema({
   email: {
     type: String,
     require:  [true,"Please add contact email"],
+    unique:[true,"Email address already taken"]
   },
   password: {
     type: String,

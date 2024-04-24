@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Node Project
 This repository serves as a learning playground for Node.js enthusiasts. Whether you are a beginner looking to explore the basics or an experienced developer seeking to enhance your Node.js skills, this project provides a hands-on environment for experimentation and learning.Node.js:  Node.js version v21.4.0
 * Express.js: express@4.18.2
@@ -16,3 +17,18 @@ Technologies Used
 * Express.js: express@4.18.2
 * Database: MongoDB
 * Testing Framework: Jest
+=======
+# node project
+Node js learning project here I am learning how to build rest api
+
+# what's being used??
+- express server
+- nodemon
+- dotenv
+- express async handler
+- mongodb
+- mongoose
+- donenv
+
+
+>>>>>>> dbfb1899e4bc34d8a50fd27ecf7afa748fe934cf
