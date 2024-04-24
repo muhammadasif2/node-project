@@ -3,7 +3,7 @@ const Contact = require("../modal/contactModal");
 // get  contacts
 
 const getContacts = asyncHandler(async (req, res) => {
-  const contact = await Contact.find({user_id:req.user.id});
+  const contact = await Contact.find();
   try {
     const responseData = {
       data: contact,
