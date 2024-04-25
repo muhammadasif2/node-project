@@ -15,7 +15,11 @@ const env = require('dotenv').config();
 // Set up middleware
 app.use(cors());
 app.use(express.json()); // Parse JSON bodies
-
+app.use(cors({
+    origin: 'https://example.com',
+    methods: ['GET', 'POST', 'PUT', 'DELETE']
+  }));
+  app.options('*', cors());
 // Define routes
 app.use('/api/contacts', require('./routes/contactsRoutes')); // Example route for contacts
 app.use('/api/users', require('./routes/userRoutes')); // Example route for users
