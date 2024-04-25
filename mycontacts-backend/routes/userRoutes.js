@@ -16,8 +16,8 @@ router.post("/register", registerUser);
 
 router.get("/current",currentUser);
 
-router.route("/").get(userList);
+router.route("/").get();
 
-router.route("/:id").put(userUpdate);
+router.route("/:id").put();
 
 module.exports = router;
