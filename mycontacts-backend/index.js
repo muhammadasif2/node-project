@@ -1,18 +1,32 @@
-const express = require('express')
-const dbConnection = require('./config/dbConnection')
+const express = require('express');
+const dbConnection = require('./config/dbConnection');
 const cors = require('cors');
-const errorHandler = require('./middleware/errosHandler')
-dbConnection()
-const app = express()
-const env = require('dotenv').config()
+const errorHandler = require('./middleware/errorHandler');
+
+// Initialize Express app
+const app = express();
+
+// Establish database connection
+dbConnection();
+
+// Load environment variables
+const env = require('dotenv').config();
+
+// Set up middleware
 app.use(cors());
-const port = process.env.PORT || 5000
-app.use(express.json())
-app.use('/api/contacts',require('./routes/contactsRoutes'))
-app.use('/api/users',require('./routes/userRoutes'))
-// app.use(errorHandler)
+app.use(express.json()); // Parse JSON bodies
 
-app.listen(port,()=>{
-    console.log('server is runing on', port)
+// Define routes
+app.use('/api/contacts', require('./routes/contactsRoutes')); // Example route for contacts
+app.use('/api/users', require('./routes/userRoutes')); // Example route for users
 
-})
+// Error handling middleware
+app.use(errorHandler);
+
+// Define port
+const port = process.env.PORT || 5000;
+
+// Start the server
+app.listen(port, () => {
+    console.log('Server is running on port', port);
+});
