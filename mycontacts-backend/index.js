@@ -1,7 +1,7 @@
 const express = require('express');
 const dbConnection = require('./config/dbConnection');
 const cors = require('cors');
-const errorHandler = require('./middleware/errorHandler');
+const errorHandler = require('./middleware/errosHandler');
 
 // Initialize Express app
 const app = express();
@@ -21,6 +21,9 @@ app.use(cors({
   }));
   app.options('*', cors());
 // Define routes
+app.get('/', function (req, res) {
+  res.send('Hello World!');
+});
 app.use('/api/contacts', require('./routes/contactsRoutes')); // Example route for contacts
 app.use('/api/users', require('./routes/userRoutes')); // Example route for users
 
