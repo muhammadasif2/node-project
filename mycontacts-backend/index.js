@@ -15,11 +15,11 @@ const env = require('dotenv').config();
 // Set up middleware
 app.use(cors());
 app.use(express.json()); // Parse JSON bodies
-app.use(cors({
-    origin: 'https://example.com',
-    methods: ['GET', 'POST', 'PUT', 'DELETE']
-  }));
-  app.options('*', cors());
+// app.use(cors({
+//     origin: 'https://example.com',
+//     methods: ['GET', 'POST', 'PUT', 'DELETE']
+//   }));
+//   app.options('*', cors());
 // Define routes
 app.get('/', function (req, res) {
   res.send('Hello World!');
